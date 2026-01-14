@@ -2,8 +2,8 @@
 venv/
 .env
 
-# Veritabanını yükleme (büyük yer kaplar, herkes kendi oluşturur)
-chroma_db/
+
+
 __pycache__/
 
 # Gereksiz sistem dosyaları
