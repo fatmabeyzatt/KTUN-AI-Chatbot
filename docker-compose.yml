@@ -1,0 +1,24 @@
+services:
+  ktun-ai-rag:
+    build: .
+    container_name: qwen3-4b-custom
+    volumes:
+      - ./chroma_db:/app/chroma_db  # Mevcut DB klasörünü bağla
+      - huggingface-cache:/root/.cache/huggingface  # Model cache'i kalıcı yap
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - HF_HOME=/root/.cache/huggingface  # HuggingFace cache konumu
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Container'ın host makineye erişimi için
+    stdin_open: true # Terminal etkileşimi için
+    tty: true        # Terminal etkileşimi için
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  huggingface-cache:  # Named volume - model cache'i kalıcı tutar

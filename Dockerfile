@@ -1,24 +1,29 @@
-# 1. Python 3.10 kullan
 FROM python:3.10-slim
 
-# 2. Linux sistem güncellemelerini yap ve derleme araçlarını kur (Hata almamak için)
+# Sistem bağımlılıklarını yükle (HuggingFace modelleri için gerekli olabilir)
 RUN apt-get update && apt-get install -y \
     build-essential \
-    g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Çalışma klasörünü ayarla
 WORKDIR /app
 
-# 4. Kütüphaneleri kopyala ve kur
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 1. Adım: Ağır kütüphaneleri baştan yükle (Layer Caching için)
+# Bu komut bir kez çalışır ve cache'e alınır. requirements.txt değişse bile burası tekrar çalışmaz.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install \
+    sentence-transformers==3.2.1 \
+    langchain-huggingface==0.0.3
 
-# 5. Tüm kodları kopyala
+# 2. Adım: Gereksinim dosyasını kopyala ve kur (Zaten yüklü olanları atlar)
+COPY requirements.txt .
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
+
+# Uygulama kodunu kopyala
 COPY . .
 
-# 6. SQLite düzeltmesi (ChromaDB için gerekebiliyor)
-ENV LD_LIBRARY_PATH=/usr/local/lib
+# Python unbuffered mod (stdout/stderr hemen flush edilir)
+ENV PYTHONUNBUFFERED=1
 
-# 7. Başlatma komutu (JSON formatı warning uyarısını da giderir)
-CMD ["sh", "-c", "python ingest.py && python test_rag.py"]
+# Uygulamayı çalıştır
+CMD ["python", "-u", "app.py"]
