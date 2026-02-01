@@ -1,10 +1,23 @@
-# Sanal ortamı yükleme (herkes kendi kurar)
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
 venv/
+.venv/
 .env
 
+# Jupyter
+.ipynb_checkpoints/
 
-
-__pycache__/
-
-# Gereksiz sistem dosyaları
+# OS
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local data / vector DB
+chroma_db/
+
+# Logs
+*.log
