@@ -48,20 +48,15 @@ for index, row in df.iterrows():
     icerik = str(row['İÇERİK (METİN / TABLO)'])
     link = str(row['KAYNAK LİNK'])
     
-    # ÖZEL İŞLEM: "BÖLÜM DERSLERİ" ve "DÖNEM" içeren satırları ayrıştır
     if "BÖLÜM DERSLERİ" in modul and "DÖNEM" in konu:
-        # İçerik zaten satırlara ayrılmış olabilir
-        donem = konu  # Örn: "DÖNEM 3"
+        donem = konu  
         
-        # İçeriği satırlara ayır - her ders bir satır
         lines = [line.strip() for line in icerik.strip().split('\n') if line.strip()]
         
         for line in lines:
-            # Başlık satırını atla
             if "Ders Kodu" in line or "Dersin Koordinatörü" in line or len(line) < 10:
                 continue
             
-            # Pipe karakteri ile ayrılmış ders satırlarını işle
             if '|' in line:
                 parts = [p.strip() for p in line.split('|')]
                 if len(parts) >= 2:
@@ -90,7 +85,6 @@ for index, row in df.iterrows():
                     )
                     documents.append(doc)
         
-        # Ayrıca tüm tabloyu da ekle (genel sorular için)
         header = f"Modül: {modul} | {konu}\n"
         full_content = header + icerik
         doc = Document(
@@ -100,7 +94,6 @@ for index, row in df.iterrows():
         documents.append(doc)
         
     else:
-        # Diğer içerikler için normal işlem
         header = f"Modül: {modul} | Konu: {konu}\n"
         
         if len(icerik) > 800:
@@ -128,7 +121,6 @@ for index, row in df.iterrows():
 print(f"\n📊 Toplam {len(documents)} optimize edilmiş parça oluşturuldu.")
 print("🧠 ChromaDB'ye kaydediliyor...")
 
-# 4. ChromaDB'ye Kaydet
 client_settings = Settings(
     anonymized_telemetry=False,
     allow_reset=True,
