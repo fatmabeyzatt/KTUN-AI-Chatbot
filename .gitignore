@@ -21,3 +21,9 @@ chroma_db/
 
 # Logs
 *.log
+
+.selenium-cache/
+structured.db
+data/raw/
+data/processed/
+ktun_bilgisayar_veri/

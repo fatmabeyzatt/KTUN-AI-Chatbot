@@ -5,7 +5,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import shutil
 import pandas as pd
-from langchain_huggingface import HuggingFaceEmbeddings
+from embedding_config import create_embedding_model
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -31,9 +31,7 @@ print("\n📂 Optimize edilmiş veri yükleme başlıyor...")
 df = pd.read_csv('data/bilgisayar_statik_veriler.csv')
 
 # 2. Embedding Modelini Hazırla
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+embeddings = create_embedding_model()
 
 # 3. Metin Parçalayıcı
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)

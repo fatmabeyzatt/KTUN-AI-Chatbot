@@ -1,7 +1,7 @@
 import chromadb
 from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
 from chromadb.config import Settings
+from embedding_config import create_embedding_model
 
 # Telemetry fix
 client_settings = Settings(
@@ -9,9 +9,7 @@ client_settings = Settings(
     allow_reset=True
 )
 
-embedding_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+embedding_model = create_embedding_model()
 
 vectorstore = Chroma(
     persist_directory="./chroma_db",

@@ -3,7 +3,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import os
-from langchain_huggingface import HuggingFaceEmbeddings
+from embedding_config import create_embedding_model
 from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama
 
@@ -16,9 +16,7 @@ print(f"\n--- DEBUG BAŞLATILDI ---")
 print(f"Koleksiyon: {COLLECTION_NAME}")
 
 # 2. Embedding Modelini Yükle (Cache kullanması için aynı ismi veriyoruz)
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+embeddings = create_embedding_model()
 
 # 3. Veritabanına Bağlan
 vectorstore = Chroma(

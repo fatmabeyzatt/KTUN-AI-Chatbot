@@ -3,7 +3,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import os
-from langchain_huggingface import HuggingFaceEmbeddings
+from embedding_config import create_embedding_model
 from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama
 from langchain.prompts import ChatPromptTemplate
@@ -14,9 +14,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 # Embedding Model
-embedding_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+embedding_model = create_embedding_model()
 
 # Veritabanı
 vectorstore = Chroma(

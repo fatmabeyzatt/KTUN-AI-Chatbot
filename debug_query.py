@@ -8,14 +8,12 @@ try:
 except ImportError:
     pass
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from embedding_config import create_embedding_model
 from langchain_chroma import Chroma
 from chromadb.config import Settings
 
 # Embedding Model
-embedding_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+embedding_model = create_embedding_model()
 
 # DB Connection
 db_path = "./chroma_db"
